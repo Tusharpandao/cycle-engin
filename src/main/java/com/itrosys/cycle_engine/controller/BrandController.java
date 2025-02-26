@@ -36,4 +36,17 @@ public class BrandController {
     public ResponseEntity<BrandResponse> getBrandByName(@RequestParam String name) {
         return new ResponseEntity<>(brandService.getBrandByName(name), HttpStatus.OK);
     }
+    // POST: http://localhost:8080/brand/create
+    @PostMapping("/create")
+    public ResponseEntity<String> createBrand(@RequestParam String name) {
+        brandService.createBrand(name);
+        return ResponseEntity.ok("Brand created successfully.");
+    }
+    // DELETE: http://localhost:8080/brand/delete/2
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteBrandById(@PathVariable int id) {
+        brandService.deleteBrandById(id);
+        return ResponseEntity.ok("Brand deleted successfully.");
+    }
+
 }

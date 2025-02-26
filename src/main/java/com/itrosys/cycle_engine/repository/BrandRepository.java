@@ -16,5 +16,7 @@ public interface BrandRepository extends JpaRepository<Brand,Integer> {
 
 	@Query("SELECT b.brandName FROM Brand b")
     List<String> findAllBrandNames();
+
+
 	
 }

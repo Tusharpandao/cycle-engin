@@ -115,5 +115,22 @@ public class ItemService {
 		            .build();
 		}
 
-	
+
+	public List<Item> getItemsByType(String type) {
+		return itemRepository.findByItemType(type);
+	}
+
+	public void deleteItemById(int id) {
+		Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFound("Item with Id " + id + "not found"));
+
+		itemRepository.deleteById(id);
+	}
+
+	// Update Item Price
+	public void updateItemPrice(int id, BigDecimal newPrice) {
+		Item item = itemRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Item not found with ID: " + id));
+		item.setPrice(newPrice);
+		itemRepository.save(item);
+	}
 }

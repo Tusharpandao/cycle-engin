@@ -57,5 +57,16 @@ public class BrandService {
 		            .build();
 	}
 
+	// Create a new Brand
+	public void createBrand(String brandName) {
+		Brand brand = new Brand();
+		brand.setBrandName(brandName);
+		brandRepository.save(brand);
+	}
+
+	// Delete a Brand
+	public void deleteBrandById(int id) {
+		brandRepository.deleteById(id);
+	}
 	
 }

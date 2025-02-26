@@ -5,15 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.itrosys.cycle_engine.entity.Item;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.itrosys.cycle_engine.dto.Cycle;
 import com.itrosys.cycle_engine.dto.CycleResponse;
@@ -55,5 +50,25 @@ public class ItemController {
 	public ResponseEntity<CycleResponse> calculatePrice(@RequestBody Cycle cycle) {
 		CycleResponse response = itemService.calculateTotalPrice(cycle);
 		return ResponseEntity.ok(response);
+	}
+
+	// GET: http://localhost:8080/item/by-type?type=Frame
+	@GetMapping("/by-type")
+	public ResponseEntity<List<Item>> getItemsByType(@RequestParam String type) {
+		return ResponseEntity.ok(itemService.getItemsByType(type));
+	}
+
+	// PUT: http://localhost:8080/item/update-price/3?price=180.00
+	@PutMapping("/update-price/{id}")
+	public ResponseEntity<String> updateItemPrice(@PathVariable int id, @RequestParam BigDecimal price) {
+		itemService.updateItemPrice(id, price);
+		return ResponseEntity.ok("Item price updated successfully.");
+	}
+
+	// DELETE: http://localhost:8080/item/delete/5
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteItemById(@PathVariable int id) {
+		itemService.deleteItemById(id);
+		return ResponseEntity.ok("Item deleted successfully.");
 	}
 }
