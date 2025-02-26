@@ -19,19 +19,19 @@ public class BrandController {
         this.brandService = brandService;
     }
 
-    // Get all brand names
+    // Get all brand names http://localhost:8080/brand/brands
     @GetMapping("/brands")
     public ResponseEntity<List<String>> getAllBrandNames() {
         return new ResponseEntity<>(brandService.getAllBrands(), HttpStatus.OK);
     }
 
-    // Get brand by ID
+    // Get brand by ID  http://localhost:8080/brand/1
     @GetMapping("/{id}")
     public ResponseEntity<BrandResponse> getBrandById(@PathVariable int id) {
         return new ResponseEntity<>(brandService.getBrand(id), HttpStatus.OK);
     }
 
-    //  Get brand by Name
+    //  Get brand by Name  http://localhost:8080/brand/by-name?name=atlas
     @GetMapping("/by-name")
     public ResponseEntity<BrandResponse> getBrandByName(@RequestParam String name) {
         return new ResponseEntity<>(brandService.getBrandByName(name), HttpStatus.OK);
