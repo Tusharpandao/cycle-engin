@@ -44,6 +44,7 @@ public class ItemController {
 		List<ItemResponse> items = itemService.getItemsByBrandName(brandName);
 		return new ResponseEntity<>(items, HttpStatus.OK);
 	}
+//	get items Type with associate item Names  "item_type": [ "itemName1","itemName2"],for all type
 //	http://localhost:8080/item/byBrand?brandName=hero
 	@GetMapping("/byBrand")
 	public Map<String, List<String>> getGroupedItemNameAndTypeByBrand(@RequestParam String brandName) {
