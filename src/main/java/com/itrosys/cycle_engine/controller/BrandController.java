@@ -2,6 +2,7 @@ package com.itrosys.cycle_engine.controller;
 
 import java.util.List;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +39,11 @@ public class BrandController {
     }
     // POST: http://localhost:8080/brand/create
     @PostMapping("/create")
-    public ResponseEntity<String> createBrand(@RequestParam String name) {
-        brandService.createBrand(name);
-        return ResponseEntity.ok("Brand created successfully.");
+    public ResponseEntity<BrandResponse> createBrand(@RequestParam String name) {
+
+        return new ResponseEntity<>(brandService.createBrand(name),HttpStatus.CREATED);
     }
+
     // DELETE: http://localhost:8080/brand/delete/2
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteBrandById(@PathVariable int id) {

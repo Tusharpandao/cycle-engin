@@ -1,7 +1,7 @@
 package com.itrosys.cycle_engine.repository;
 
 import com.itrosys.cycle_engine.dto.ItemNameAndTypelResponse;
-import com.itrosys.cycle_engine.dto.ItemResponse;
+import com.itrosys.cycle_engine.entity.Brand;
 import com.itrosys.cycle_engine.entity.Item;
 
 import java.util.List;
@@ -26,4 +26,7 @@ public interface ItemRepository extends JpaRepository<Item,Integer> {
 	                                        @Param("selectedItems") List<String> selectedItems);
 
     List<Item> findByItemType(String type);
+
+	List<Item> findByBrand(Brand brand);
+
 }

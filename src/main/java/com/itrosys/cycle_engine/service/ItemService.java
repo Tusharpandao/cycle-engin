@@ -121,16 +121,18 @@ public class ItemService {
 	}
 
 	public void deleteItemById(int id) {
-		Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFound("Item with Id " + id + "not found"));
+		Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFound("Item with Id " + id + "  not found"));
 
 		itemRepository.deleteById(id);
 	}
 
-	// Update Item Price
-	public void updateItemPrice(int id, BigDecimal newPrice) {
+	public ItemResponse updateItemPrice(int id, BigDecimal newPrice) {
 		Item item = itemRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Item not found with ID: " + id));
+				.orElseThrow(() -> new ItemNotFound("Item not found with ID: " + id));
 		item.setPrice(newPrice);
-		itemRepository.save(item);
+		Item savedItem = itemRepository.save(item);
+		return mapToItemResponse(savedItem);
+
 	}
+
 }

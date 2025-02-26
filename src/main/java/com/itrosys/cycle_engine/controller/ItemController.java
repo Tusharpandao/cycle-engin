@@ -45,6 +45,7 @@ public class ItemController {
 	public Map<String, List<String>> getGroupedItemNameAndTypeByBrand(@RequestParam String brandName) {
 		return itemService.getGroupedItemNameAndTypeByBrandName(brandName);
 	}
+
 //	http://localhost:8080/item/calculate-price
 	@PostMapping("/calculate-price")
 	public ResponseEntity<CycleResponse> calculatePrice(@RequestBody Cycle cycle) {
@@ -52,18 +53,19 @@ public class ItemController {
 		return ResponseEntity.ok(response);
 	}
 
+	// Get the items by item Type
 	// GET: http://localhost:8080/item/by-type?type=Frame
 	@GetMapping("/by-type")
 	public ResponseEntity<List<Item>> getItemsByType(@RequestParam String type) {
 		return ResponseEntity.ok(itemService.getItemsByType(type));
 	}
-
+	// update the  item price
 	// PUT: http://localhost:8080/item/update-price/3?price=180.00
-	@PutMapping("/update-price/{id}")
-	public ResponseEntity<String> updateItemPrice(@PathVariable int id, @RequestParam BigDecimal price) {
-		itemService.updateItemPrice(id, price);
-		return ResponseEntity.ok("Item price updated successfully.");
+	@PatchMapping("/update-price/{id}")
+	public ResponseEntity<ItemResponse> updateItemPrice(@PathVariable int id, @RequestParam BigDecimal price) {
+		return new ResponseEntity<>(itemService.updateItemPrice(id, price),HttpStatus.ACCEPTED);
 	}
+
 
 	// DELETE: http://localhost:8080/item/delete/5
 	@DeleteMapping("/delete/{id}")

@@ -17,4 +17,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleItemNotFoundException(ItemNotFound ex){
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
+	@ExceptionHandler(DuplicateBrand.class)
+	public ResponseEntity<String> handleDuplicateBrandException(DuplicateBrand ex){
+		return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+
+	}
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<String> handleIllegalStateException(IllegalStateException ex){
+		return  new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+	}
 }
