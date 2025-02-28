@@ -41,6 +41,7 @@ public class ItemController {
 //		List<ItemResponse> items = itemService.getItemsByBrandName(brandName);
 		return new ResponseEntity<>(itemService.getItemsByBrandName(brandName), HttpStatus.OK);
 	}
+//	Important API
 //	get items Type with associate item Names  "item_type": [ "itemName1","itemName2"],for all type
 //	http://localhost:8080/item/byBrand?brandName=hero
 	@GetMapping("/byBrand")
@@ -54,7 +55,7 @@ public class ItemController {
 	public ResponseEntity<List<ItemResponse>> getItemsByType(@RequestParam String type) {
 		return ResponseEntity.ok(itemService.getItemsByType(type));
 	}
-
+	//	Important API
 //	http://localhost:8080/item/calculate-price
 	@PostMapping("/calculate-price")
 	public ResponseEntity<CycleResponse> calculatePrice(@RequestBody Cycle cycle) {

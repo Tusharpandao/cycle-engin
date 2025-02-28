@@ -21,6 +21,7 @@ public class BrandController {
         this.brandService = brandService;
     }
 
+//  Important API
     // Get all brand names http://localhost:8080/brand/brands
     @GetMapping("/brands")
     public ResponseEntity<List<BrandResponse>> getAllBrandNames() {
