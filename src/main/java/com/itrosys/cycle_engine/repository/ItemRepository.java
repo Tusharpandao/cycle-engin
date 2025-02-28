@@ -17,7 +17,7 @@ public interface ItemRepository extends JpaRepository<Item,Integer> {
 	 List<Item> findByBrand_BrandName(String brandName);
 	 
 	 @Query("SELECT DISTINCT new com.itrosys.cycle_engine.dto.ItemNameAndTypelResponse(i.itemName, i.itemType) " +
-		       "FROM Item i WHERE i.brand.brandName = :brandName")
+		       "FROM Item i WHERE i.brand.brandName = :brandName AND i.isActive = 'Y'")
 		List<ItemNameAndTypelResponse> findDistinctItemsByBrandName(@Param("brandName") String brandName);
 
 
@@ -25,7 +25,9 @@ public interface ItemRepository extends JpaRepository<Item,Integer> {
 	    List<Item> findItemsByBrandAndNames(@Param("brandName") String brandName, 
 	                                        @Param("selectedItems") List<String> selectedItems);
 
-    List<Item> findByItemType(String type);
+	List<Item> findByItemTypeAndIsActiveAndBrand_IsActive(String type, char itemIsActive, char brandIsActive);
+
+
 
 	List<Item> findByBrand(Brand brand);
 

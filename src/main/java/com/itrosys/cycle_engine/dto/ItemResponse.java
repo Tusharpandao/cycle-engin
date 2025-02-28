@@ -19,4 +19,5 @@ public class ItemResponse {
 	private BigDecimal price;
 	private Date validTo;
 	private String brandName;
+	private int brandId;
 }

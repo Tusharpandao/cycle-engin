@@ -15,8 +15,10 @@ public interface BrandRepository extends JpaRepository<Brand,Integer> {
 	Optional<Brand> findByBrandName(String brandName);
 
 	@Query("SELECT b.brandName FROM Brand b")
-    List<String> findAllBrandNames();
+    List<String> findAllBrand();
+
+	List<Brand> findByIsActive(char isActive);
 
 
-	
+	Optional<Brand> findByBrandNameAndIsActive(String brandName, char y);
 }

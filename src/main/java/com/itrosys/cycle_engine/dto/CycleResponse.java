@@ -27,6 +27,7 @@ public class CycleResponse {
 	private String handlebar;
 	private BigDecimal price;
 	private BigDecimal gst;
+	private BigDecimal discount;
 	private BigDecimal totalPrice;
 	// Breakdown of individual parts' prices
 	private Map<String, BigDecimal> partsPrice;

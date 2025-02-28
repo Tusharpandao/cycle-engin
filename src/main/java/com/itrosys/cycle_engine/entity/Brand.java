@@ -2,6 +2,7 @@ package com.itrosys.cycle_engine.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "brands")
@@ -18,4 +19,15 @@ public class Brand {
 
     @Column(name = "brand_name", nullable = false, unique = true)
     private String brandName;
+
+    @Column(name = "is_active", nullable = false)
+    private char isActive; // 'Y' or 'N'
+
+    @Column(name = "modified_by", nullable = false)
+    private String modifiedBy;
+
+    @Column(name = "modified_on", nullable = false, updatable = false, insertable = false,
+            columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifiedOn;
 }

@@ -2,7 +2,6 @@ package com.itrosys.cycle_engine.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -29,10 +28,21 @@ public class Item {
     private BigDecimal price;
 
     @Column(name = "valid_to", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date validTo;
 
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
+
+    @Column(name = "is_active", nullable = false)
+    private char isActive; // 'Y' or 'N'
+
+    @Column(name = "modified_by", nullable = false)
+    private String modifiedBy;
+
+    @Column(name = "modified_on", nullable = false, updatable = false, insertable = false,
+            columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifiedOn;
 }
