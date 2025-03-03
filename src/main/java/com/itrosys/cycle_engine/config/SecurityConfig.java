@@ -27,7 +27,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for testing; enable in production
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/brand/delete/**", "/item/delete/**","/brand/update/**", "/brand/add","/item/add", "/item/update-price/**")
+                        .requestMatchers("/brand/delete/**", "/item/delete/**","/brand/update/**", "/brand/add","/item/add", "/item/update/**")
                         .hasAnyRole("ADMIN", "MANAGER")  //  ALLOW BOTH ROLES
                         .anyRequest().permitAll() // Allow all other requests without authentication
                 )

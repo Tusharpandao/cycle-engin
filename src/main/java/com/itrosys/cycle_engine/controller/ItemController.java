@@ -1,89 +1,92 @@
 package com.itrosys.cycle_engine.controller;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.itrosys.cycle_engine.dto.ItemRequest;
-import com.itrosys.cycle_engine.entity.Item;
+import com.itrosys.cycle_engine.dto.ItemResponse;
+import com.itrosys.cycle_engine.service.ItemService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.itrosys.cycle_engine.dto.Cycle;
-import com.itrosys.cycle_engine.dto.CycleResponse;
-import com.itrosys.cycle_engine.dto.ItemResponse;
-import com.itrosys.cycle_engine.service.ItemService;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/item")
+@Tag(name = "Item Controller", description = "APIs related to Item Management")
 public class ItemController {
 
-	private ItemService itemService;
+    private final ItemService itemService;
 
-	public ItemController(ItemService itemService) {
-		this.itemService = itemService;
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
 
-	}
-	// get item By id
-//	http://localhost:8080/item/by-id/2
-	@GetMapping("by-id/{id}")
-	public ResponseEntity<ItemResponse> getItemById(@PathVariable int id) {
-		return new ResponseEntity<>(itemService.getItemById(id), HttpStatus.FOUND);
+    @Operation(summary = "Get Item by ID", description = "Fetch item details by its ID")
+    @GetMapping("/itemId/{id}")
+    public ResponseEntity<ItemResponse> getItemById(@PathVariable int id) {
+        return new ResponseEntity<>(itemService.getItemById(id), HttpStatus.FOUND);
+    }
 
-	}
-//	get items By brand name
-//	http://localhost:8080/item/brand/hero
-	@GetMapping("/brand/{brandName}")
-	public ResponseEntity<List<ItemResponse>> getItemsByBrandName(@PathVariable String brandName) {
-//		List<ItemResponse> items = itemService.getItemsByBrandName(brandName);
-		return new ResponseEntity<>(itemService.getItemsByBrandName(brandName), HttpStatus.OK);
-	}
-//	Important API
-//	get items Type with associate item Names  "item_type": [ "itemName1","itemName2"],for all type
-//	http://localhost:8080/item/byBrand?brandName=hero
-	@GetMapping("/byBrand")
-	public ResponseEntity<Map<String, List<String>>> getGroupedItemNameAndTypeByBrand(@RequestParam String brandName) {
-		return new ResponseEntity<>(itemService.getGroupedItemNameAndTypeByBrandName(brandName),HttpStatus.FOUND);
-	}
-
-	// Get the items by item Type
-	// GET: http://localhost:8080/item/by-type?type=Frame
-	@GetMapping("/by-type")
-	public ResponseEntity<List<ItemResponse>> getItemsByType(@RequestParam String type) {
-		return ResponseEntity.ok(itemService.getItemsByType(type));
-	}
-	//	Important API
-//	http://localhost:8080/item/calculate-price
-	@PostMapping("/calculate-price")
-	public ResponseEntity<CycleResponse> calculatePrice(@RequestBody Cycle cycle) {
-		CycleResponse response = itemService.calculateTotalPrice(cycle);
-		return ResponseEntity.ok(response);
-	}
+    @Operation(summary = "Get Items by Brand Name", description = "Fetch all items belonging to a specific brand")
+    @GetMapping("/brand/{brandName}")
+    public ResponseEntity<List<ItemResponse>> getItemsByBrandName(@PathVariable String brandName) {
+        return new ResponseEntity<>(itemService.getItemsByBrandName(brandName.toUpperCase()), HttpStatus.OK);
+    }
 
 
-	// update the  item price
-	// http://localhost:8080/item/update-price/3?price=180.00
-	@PatchMapping("/update-price/")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
-	public ResponseEntity<ItemResponse> updateItemPrice(@RequestParam int itemId, @RequestParam BigDecimal price) {
-		return new ResponseEntity<>(itemService.updateItemPrice(itemId, price),HttpStatus.ACCEPTED);
-	}
+    @Operation(summary = "Get Items by Type", description = "Fetch all items of a specific type")
+    @GetMapping("/itemType/{type}")
+    public ResponseEntity<List<ItemResponse>> getItemsByType(@PathVariable String type) {
+        return ResponseEntity.ok(itemService.getItemsByType(type));
+    }
 
-	// Add item  POST http://localhost:8080/item/add
-	@PostMapping("/add")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
-	public ResponseEntity<ItemResponse> addItem(@RequestBody ItemRequest itemRequest) {
-		return new ResponseEntity<>(itemService.addItem(itemRequest), HttpStatus.CREATED);
-	}
+    @Operation(summary = "Add a New Item", description = "Create a new item in the system",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<ItemResponse> addItem(@RequestBody ItemRequest itemRequest) {
+        return new ResponseEntity<>(itemService.addItem(itemRequest), HttpStatus.CREATED);
+    }
 
-	// DELETE: http://localhost:8080/item/delete/5
-	@DeleteMapping("/delete/{id}")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
-	public ResponseEntity<String> deleteItemById(@PathVariable int id) {
-		itemService.deleteItemById(id);
-		return ResponseEntity.ok("Item deleted successfully.");
-	}
+
+    @Operation(summary = "Update Item Price", description = "Update the price of an item by its ID",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @PatchMapping("/update/price")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    public ResponseEntity<ItemResponse> updateItemPrice(@RequestParam int itemId, @RequestParam BigDecimal price) {
+        return new ResponseEntity<>(itemService.updateItemPrice(itemId, price), HttpStatus.ACCEPTED);
+    }
+
+    @Operation(summary = "Update Item valid Date and Time",
+            description = "Update the valid date of an item by its ID",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @PatchMapping("/update/date-time")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    public ResponseEntity<ItemResponse> updateItemValidDateTime( @RequestParam int itemId, @RequestParam String validTo) {
+        return new ResponseEntity<>(itemService.updateValidDate(validTo, itemId), HttpStatus.CREATED);
+    }
+
+
+    @Operation(summary = "Make Item Active", description = "Make the Activate the item by its ID if associated brand is active",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @PatchMapping("/update/item-active/{itemId}")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    public ResponseEntity<ItemResponse> makeItemActive(@PathVariable int itemId) {
+        return ResponseEntity.ok(itemService.makeItemActive(itemId));
+    }
+
+    @Operation(summary = "Delete Item by ID", description = "Remove an item from the system by its ID",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    public ResponseEntity<String> deleteItemById(@PathVariable int id) {
+        itemService.deleteItemById(id);
+        return ResponseEntity.ok("Item deleted successfully.");
+    }
 }
